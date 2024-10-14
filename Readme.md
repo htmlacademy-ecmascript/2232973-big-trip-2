@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Константин Ткаченко](https://up.htmlacademy.ru/ecmascript-individual/2/user/2232973).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/spearance).
 
 ---
 
