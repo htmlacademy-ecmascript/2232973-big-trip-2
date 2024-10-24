@@ -12,12 +12,12 @@ export default class ListPresenter {
   }
 
   init() {
-    this.listTasks = [...this.pointsModel.getPoints()];
+    this.listPoints = [...this.pointsModel.getPoints()];
     render(this.listComponent, this.listContainer);
-    render(new CreateFormView(), this.listComponent.getElement());
+    render(new CreateFormView({point: this.listPoints[0]}), this.listComponent.getElement());
 
-    for (let i = 0; i < this.listTasks.length; i++) {
-      render(new DestinationPointView({point: this.listTasks[i]}), this.listComponent.getElement());
+    for (let i = 0; i < this.listPoints.length; i++) {
+      render(new DestinationPointView({point: this.listPoints[i]}), this.listComponent.getElement());
     }
   }
 }

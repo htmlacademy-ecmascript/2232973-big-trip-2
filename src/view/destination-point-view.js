@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
 
-function createDestinationPointTemplate(task) {
-  const {type, destination, basePrice, dateFrom, dateTo, offers, isFavorite} = task;
+function createDestinationPointTemplate(point) {
+  const {type, destination, basePrice, dateFrom, dateTo, offers, isFavorite} = point;
   const startTimeOnly = dateFrom.split('T')[1];
   const endTimeOnly = dateTo.split('T')[1];
   const offersTemplate = offers.map((offer) => `<li class="event__offer">

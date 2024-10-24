@@ -7,7 +7,15 @@ const mockDestinations = [
     name: 'Paris',
     photos: [
       {
-        src: 'photo1.jpg',
+        src: 'https://loremflickr.com/248/152?random=1',
+        description: 'The Louvre Museum, located in the city center, is one of the most visited museums in the world.'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=2',
+        description: 'The Louvre Museum, located in the city center, is one of the most visited museums in the world.'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=3',
         description: 'The Louvre Museum, located in the city center, is one of the most visited museums in the world.'
       }
     ],
@@ -18,7 +26,15 @@ const mockDestinations = [
     name: 'London',
     photos: [
       {
-        src: 'photo2.jpg',
+        src: 'https://loremflickr.com/248/152?random=4',
+        description: 'London Eye, located in the city center.'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=5',
+        description: 'London Eye, located in the city center.'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=6',
         description: 'London Eye, located in the city center.'
       }
     ],
@@ -29,7 +45,15 @@ const mockDestinations = [
     name: 'Amsterdam',
     photos: [
       {
-        src: 'photo3.jpg',
+        src: 'https://loremflickr.com/248/152?random=7',
+        description: 'Red Lights District'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=8',
+        description: 'Red Lights District'
+      },
+      {
+        src: 'https://loremflickr.com/248/152?random=9',
         description: 'Red Lights District'
       }
     ],
