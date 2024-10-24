@@ -1,9 +1,13 @@
 import {createElement} from '../render.js';
+import { calculateDuration, getEventDate } from '../utils.js';
 
 function createDestinationPointTemplate(point) {
   const {type, destination, basePrice, dateFrom, dateTo, offers, isFavorite} = point;
-  const startTimeOnly = dateFrom.split('T')[1];
-  const endTimeOnly = dateTo.split('T')[1];
+  const startTimeOnly = dateFrom.split('T')[1].slice(0, 5);
+  const endTimeOnly = dateTo.split('T')[1].slice(0, 5);
+  const eventDate = getEventDate(dateFrom);
+  const eventDuration = calculateDuration(dateFrom, dateTo);
+
   const offersTemplate = offers.map((offer) => `<li class="event__offer">
     <span class="event__offer-title">${offer.title}</span>
     &plus;&euro;&nbsp;
@@ -19,7 +23,7 @@ function createDestinationPointTemplate(point) {
 
   return `<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-18">MAR 18</time>
+                <time class="event__date" datetime="${dateFrom}">${eventDate}</time>
                 <div class="event__type">
                   <img class="event__${type}-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
@@ -30,7 +34,7 @@ function createDestinationPointTemplate(point) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateTo}">${endTimeOnly}</time>
                   </p>
-                  <p class="event__duration">01H 10M</p>
+                  <p class="event__duration">${eventDuration}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

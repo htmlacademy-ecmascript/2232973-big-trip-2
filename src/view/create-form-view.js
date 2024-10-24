@@ -1,7 +1,11 @@
 import {createElement} from '../render.js';
+import { formatDateToCustom } from '../utils.js';
 
 function createCreateFormTemplate(point) {
   const {type, basePrice, dateFrom, dateTo, destination, offers} = point;
+  const customStartDate = formatDateToCustom(dateFrom);
+  const customEndDate = formatDateToCustom(dateTo);
+
   const offersTemplate = offers.map((offer) => `<div class="event__offer-selector">
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
                         <label class="event__offer-label" for="event-offer-comfort-1">
@@ -87,10 +91,10 @@ function createCreateFormTemplate(point) {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom}">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${customStartDate}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo}">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${customEndDate}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
