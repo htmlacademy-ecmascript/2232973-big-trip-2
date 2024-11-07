@@ -4,20 +4,23 @@ import DestinationPointView from '../view/destination-point-view.js';
 import {render} from '../framework/render.js';
 
 export default class ListPresenter {
-  listComponent = new ListView();
+  #listComponent = new ListView();
 
+  #listContainer = null;
+  #pointsModel = null;
+  #listPoints = [];
   constructor({listContainer, pointsModel}) {
-    this.listContainer = listContainer;
-    this.pointsModel = pointsModel;
+    this.#listContainer = listContainer;
+    this.#pointsModel = pointsModel;
   }
 
   init() {
-    this.listPoints = [...this.pointsModel.getPoints()];
-    render(this.listComponent, this.listContainer);
-    render(new CreateFormView({point: this.listPoints[0]}), this.listComponent.element);
+    this.#listPoints = [...this.#pointsModel.points];
+    render(this.#listComponent, this.#listContainer);
+    render(new CreateFormView({point: this.#listPoints[0]}), this.#listComponent.element);
 
-    for (let i = 0; i < this.listPoints.length; i++) {
-      render(new DestinationPointView({point: this.listPoints[i]}), this.listComponent.element);
+    for (let i = 0; i < this.#listPoints.length; i++) {
+      render(new DestinationPointView({point: this.#listPoints[i]}), this.#listComponent.element);
     }
   }
 }
