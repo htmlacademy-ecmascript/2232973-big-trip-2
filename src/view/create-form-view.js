@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { formatDateToCustom } from '../utils.js';
 
 function createCreateFormTemplate(point) {
@@ -131,23 +131,14 @@ function createCreateFormTemplate(point) {
               </form>`;
 }
 
-export default class CreateFormView {
+export default class CreateFormView extends AbstractView {
+  #point = null;
   constructor({point}) {
-    this.point = point;
+    super();
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createCreateFormTemplate(this.point);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createCreateFormTemplate(this.#point);
   }
 }

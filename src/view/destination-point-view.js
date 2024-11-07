@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { calculateDuration, getEventDate } from '../utils.js';
 
 function createDestinationPointTemplate(point) {
@@ -25,7 +25,7 @@ function createDestinationPointTemplate(point) {
               <div class="event">
                 <time class="event__date" datetime="${dateFrom}">${eventDate}</time>
                 <div class="event__type">
-                  <img class="event__${type}-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${destination.name}</h3>
                 <div class="event__schedule">
@@ -51,23 +51,14 @@ function createDestinationPointTemplate(point) {
             </li>`;
 }
 
-export default class DestinationPointView {
+export default class DestinationPointView extends AbstractView {
+  #point = null;
   constructor({point}) {
-    this.point = point;
+    super();
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createDestinationPointTemplate(this.point);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createDestinationPointTemplate(this.#point);
   }
 }
