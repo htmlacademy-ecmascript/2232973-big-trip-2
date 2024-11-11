@@ -15,6 +15,10 @@ export default class ListPresenter {
   }
 
   init() {
+    this.#renderList();
+  }
+
+  #renderList() {
     this.#listPoints = [...this.#pointsModel.points];
     render(this.#listComponent, this.#listContainer);
 
