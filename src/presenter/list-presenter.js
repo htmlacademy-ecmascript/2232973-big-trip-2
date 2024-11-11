@@ -1,6 +1,7 @@
 import ListView from '../view/list-view.js';
 import EditFormView from '../view/edit-form-view.js';
 import DestinationPointView from '../view/destination-point-view.js';
+import NoPointsView from '../view/no-points-view.js';
 import {render, replace} from '../framework/render.js';
 
 export default class ListPresenter {
@@ -21,6 +22,11 @@ export default class ListPresenter {
   #renderList() {
     this.#listPoints = [...this.#pointsModel.points];
     render(this.#listComponent, this.#listContainer);
+
+    if (this.#listPoints.length === 0) {
+      render(new NoPointsView(), this.#listContainer);
+      return;
+    }
 
     for (let i = 0; i < this.#listPoints.length; i++) {
       this.#renderPoint(this.#listPoints[i]);
