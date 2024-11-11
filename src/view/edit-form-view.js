@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDateToCustom } from '../utils.js';
 
-function createCreateFormTemplate(point) {
+function createEditFormTemplate(point) {
   const {type, basePrice, dateFrom, dateTo, destination, offers} = point;
   const customStartDate = formatDateToCustom(dateFrom);
   const customEndDate = formatDateToCustom(dateTo);
@@ -14,9 +14,9 @@ function createCreateFormTemplate(point) {
                           <span class="event__offer-price">${offer.price}</span>
                         </label>
                       </div>`).join('');
-  const photosTemplate = destination.photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('');
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `            <li class="trip-events__item">
+              <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -106,32 +106,30 @@ function createCreateFormTemplate(point) {
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button class="event__rollup-btn" type="button">
+                    <span class="visually-hidden">Open event</span>
+                  </button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                    ${offersTemplate}
+                      ${offersTemplate}
                     </div>
                   </section>
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${destination.description}</p>
-
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                      ${photosTemplate}
-                      </div>
-                    </div>
                   </section>
                 </section>
-              </form>`;
+              </form>
+            </li>`;
 }
 
-export default class CreateFormView extends AbstractView {
+export default class EditFormView extends AbstractView {
   #point = null;
   #handleFormSubmit = null;
 
@@ -140,12 +138,16 @@ export default class CreateFormView extends AbstractView {
     this.#point = point;
     this.#handleFormSubmit = onFormSubmit;
 
-    this.element.querySelector('.event__save-btn')
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formSubmitHandler);
+
+    this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
+
   }
 
   get template() {
-    return createCreateFormTemplate(this.#point);
+    return createEditFormTemplate(this.#point);
   }
 
   #formSubmitHandler = (evt) => {

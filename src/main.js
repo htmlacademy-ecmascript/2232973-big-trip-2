@@ -1,7 +1,7 @@
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import ListPresenter from './presenter/list-presenter.js';
-import {render} from './render.js';
+import {render} from './framework/render.js';
 import PointsModel from './model/points-model.js';
 
 const filterContainer = document.querySelector('.trip-controls__filters');
