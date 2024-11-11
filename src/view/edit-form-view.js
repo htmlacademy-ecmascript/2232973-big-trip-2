@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatDateToCustom } from '../utils.js';
+import {formatDateToCustom} from '../utils/point.js';
 
 function createEditFormTemplate(point) {
   const {type, basePrice, dateFrom, dateTo, destination, offers} = point;

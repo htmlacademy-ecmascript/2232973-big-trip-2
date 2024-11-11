@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {DATE_TIME_FORMAT, EVENT_DATE_FORMAT} from './const';
+import {DATE_TIME_FORMAT, EVENT_DATE_FORMAT} from '../const';
 
 dayjs.extend(duration);
 
@@ -33,8 +33,4 @@ function getEventDate(date) {
   return dayjs(date).format(EVENT_DATE_FORMAT);
 }
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-export {getRandomArrayElement, getEventDate, calculateDuration, formatDateToCustom};
+export {getEventDate, calculateDuration, formatDateToCustom};
