@@ -1,5 +1,5 @@
 import ListView from '../view/list-view.js';
-import CreateFormView from '../view/create-form-view.js';
+import EditFormView from '../view/edit-form-view.js';
 import DestinationPointView from '../view/destination-point-view.js';
 import {render, replace} from '../framework/render.js';
 
@@ -38,7 +38,7 @@ export default class ListPresenter {
         document.addEventListener('keydown', escKeydownHandler);
       }
     });
-    const pointEditComponent = new CreateFormView({
+    const pointEditComponent = new EditFormView({
       point,
       onFormSubmit: () => {
         replaceFormToPoint();
