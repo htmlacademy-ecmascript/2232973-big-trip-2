@@ -158,6 +158,26 @@ const mockPoints = [
     isFavorite: true,
     offers: getOffersByType('check-in'),
     type: 'check-in',
+  },
+  {
+    id: 4,
+    basePrice: 500,
+    dateFrom: '2024-11-23T08:00:00',
+    dateTo: '2024-12-24T22:00:00',
+    destination: getRandomDestination(),
+    isFavorite: true,
+    offers: getOffersByType('check-in'),
+    type: 'check-in',
+  },
+  {
+    id: 5,
+    basePrice: 800,
+    dateFrom: '2025-02-23T08:00:00',
+    dateTo: '2025-02-24T22:00:00',
+    destination: getRandomDestination(),
+    isFavorite: true,
+    offers: getOffersByType('check-in'),
+    type: 'check-in',
   }
 ];
 
