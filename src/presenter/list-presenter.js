@@ -2,13 +2,17 @@ import ListView from '../view/list-view.js';
 import EditFormView from '../view/edit-form-view.js';
 import DestinationPointView from '../view/destination-point-view.js';
 import NoPointsView from '../view/no-points-view.js';
-import {render, replace} from '../framework/render.js';
+import SortView from '../view/sort-view.js';
+import {render, RenderPosition, replace} from '../framework/render.js';
 
 export default class ListPresenter {
-  #listComponent = new ListView();
-
   #listContainer = null;
   #pointsModel = null;
+
+  #listComponent = new ListView();
+  #sortComponent = new SortView();
+  #noPointsComponent = new NoPointsView();
+
   #listPoints = [];
   constructor({listContainer, pointsModel}) {
     this.#listContainer = listContainer;
@@ -16,21 +20,13 @@ export default class ListPresenter {
   }
 
   init() {
+    this.#listPoints = [...this.#pointsModel.points];
+
     this.#renderList();
   }
 
-  #renderList() {
-    this.#listPoints = [...this.#pointsModel.points];
-    render(this.#listComponent, this.#listContainer);
-
-    if (this.#listPoints.length === 0) {
-      render(new NoPointsView(), this.#listContainer);
-      return;
-    }
-
-    for (let i = 0; i < this.#listPoints.length; i++) {
-      this.#renderPoint(this.#listPoints[i]);
-    }
+  #renderSort() {
+    render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
@@ -65,5 +61,28 @@ export default class ListPresenter {
     }
 
     render(pointComponent, this.#listComponent.element);
+  }
+
+  #renderPoints(from, to) {
+    this.#listPoints
+      .slice(from, to)
+      .forEach((point) => this.#renderPoint(point));
+  }
+
+  #renderNoPoints() {
+    render(this.#noPointsComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderList() {
+    render(this.#listComponent, this.#listContainer);
+
+    this.#renderPoints(0, this.#listPoints.length);
+
+    if (this.#listPoints.length === 0) {
+      this.#renderNoPoints();
+      return;
+    }
+
+    this.#renderSort();
   }
 }
