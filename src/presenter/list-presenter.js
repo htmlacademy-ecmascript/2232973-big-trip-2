@@ -3,6 +3,7 @@ import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
 import {render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 export default class ListPresenter {
   #listContainer = null;
@@ -13,6 +14,8 @@ export default class ListPresenter {
   #noPointsComponent = new NoPointsView();
 
   #listPoints = [];
+  #pointPresenters = new Map();
+
   constructor({listContainer, pointsModel}) {
     this.#listContainer = listContainer;
     this.#pointsModel = pointsModel;
@@ -24,6 +27,10 @@ export default class ListPresenter {
     this.#renderList();
   }
 
+  #handlePointChange = (updatedPoint) => {
+    this.#listPoints = updateItem(this.#listPoints, updatedPoint);
+  };
+
   #renderSort() {
     render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
   }
@@ -32,14 +39,19 @@ export default class ListPresenter {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#listComponent.element,
     });
-
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
   #renderPoints(from, to) {
     this.#listPoints
       .slice(from, to)
       .forEach((point) => this.#renderPoint(point));
+  }
+
+  #clearPointsList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
   }
 
   #renderNoPoints() {
