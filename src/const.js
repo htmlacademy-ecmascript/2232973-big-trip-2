@@ -16,4 +16,12 @@ const FilterText = {
   PAST: 'There are no past events now',
 };
 
-export {POINTS_COUNT, EVENT_DATE_FORMAT, DATE_TIME_FORMAT, FilterText, FilterType};
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
+};
+
+export {POINTS_COUNT, EVENT_DATE_FORMAT, DATE_TIME_FORMAT, FilterText, FilterType, SortType};
