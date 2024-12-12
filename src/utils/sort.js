@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 function sortByPrice(a, b) {
-  return a.basePrice - b.basePrice;
+  return b.basePrice - a.basePrice;
 }
 
 function sortByTime(a, b) {
