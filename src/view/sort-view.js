@@ -20,7 +20,8 @@ function createSortItemTemplate(sort, currentSortType) {
 }
 
 function createSortTemplate(currentSortType) {
-  const sortItemsTemplate = Object.values(SortType)
+  const sortItemsTemplate = Object
+    .values(SortType)
     .map((sort) => createSortItemTemplate(sort, currentSortType))
     .join('');
 

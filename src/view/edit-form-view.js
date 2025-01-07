@@ -1,19 +1,75 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {formatDateToCustom} from '../utils/point.js';
 
-function createEditFormTemplate(point) {
-  const {type, basePrice, dateFrom, dateTo, destination, offers} = point;
+const createDestinationItemTemplate = (destinations) =>
+  destinations.map(({name}) =>
+    `<option value="${name}"></option>`
+  ).join('');
+
+// const createEventItemTemplate = (offers, checkedType) =>
+//   offers.map(({type}) =>
+//     `<div class="event__type-item">
+//       <input id="event-type-${type}-1" class="event__type-input  visually-hidden"  type="radio" name="event-type" value="${type}" ${checkedType === type ? 'checked' : ''}>
+//       <label class="event__type-label  event__type-label--${type}"  for="event-type-${type}-1">${type}</label>
+//     </div>`
+//   ).join('');
+
+const createOfferItemTemplate = (offersByType, point, type) =>
+  offersByType.offers.map(({id, title, price}) => {
+    const isChecked = point.offers.includes(id)
+      ? 'checked'
+      : '';
+
+    return (
+      `<div class="event__offer-selector">
+        <input
+          class="event__offer-checkbox  visually-hidden"
+          id="event-offer-${id}"
+          data-offer-id="${id}"
+          type="checkbox"
+          name="event-offer-${type}-${id}"
+          ${isChecked}
+        />
+        <label class="event__offer-label" for="event-offer-${id}">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </label>
+      </div>`
+    );
+  }).join('');
+
+const createOffersContainerTemplate = (offers, point, type) => {
+  const offersByType = offers.find((offer) => offer.type === type);
+
+  if (!offersByType.offers.length) {
+    return '';
+  }
+
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+      <div class="event__available-offers">
+        ${createOfferItemTemplate(offersByType, point, type)}
+      </div>
+    </section>`
+  );
+};
+
+function createEditFormTemplate(point, destinations, offers) {
+  const {type, basePrice, dateFrom, dateTo} = point;
+  const destination = destinations.find((currentDestination) =>
+    currentDestination.id === point.destination);
+  const {
+    name,
+    description,
+    photos
+  } = destination;
+
   const customStartDate = formatDateToCustom(dateFrom);
   const customEndDate = formatDateToCustom(dateTo);
-
-  const offersTemplate = offers.map((offer) => `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-                        <label class="event__offer-label" for="event-offer-comfort-1">
-                          <span class="event__offer-title">${offer.title}</span>
-                          &plus;&euro;&nbsp;
-                          <span class="event__offer-price">${offer.price}</span>
-                        </label>
-                      </div>`).join('');
+  const photosTemplate = photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('');
 
   return `            <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -81,11 +137,9 @@ function createEditFormTemplate(point) {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Paris"></option>
-                      <option value="London"></option>
+                      ${createDestinationItemTemplate(destinations)}
                     </datalist>
                   </div>
 
@@ -112,17 +166,16 @@ function createEditFormTemplate(point) {
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-                    <div class="event__available-offers">
-                      ${offersTemplate}
-                    </div>
-                  </section>
+                  ${createOffersContainerTemplate(offers, point, type)}
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${destination.description}</p>
+                    <p class="event__destination-description">${description}</p>
+                      <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                        ${photosTemplate}
+                      </div>
+                    </div>
                   </section>
                 </section>
               </form>
@@ -131,18 +184,22 @@ function createEditFormTemplate(point) {
 
 export default class EditFormView extends AbstractStatefulView {
   #point = null;
+  #destinations = null;
+  #offers = null;
   #handleFormSubmit = null;
 
-  constructor({point, onFormSubmit}) {
+  constructor({point, destinations, offers, onFormSubmit}) {
     super();
     this._setState(EditFormView.parsePointToState(point));
+    this.#destinations = destinations;
+    this.#offers = offers;
     this.#handleFormSubmit = onFormSubmit;
 
     this._restoreHandlers();
   }
 
   get template() {
-    return createEditFormTemplate(this._state);
+    return createEditFormTemplate(this._state, this.#destinations, this.#offers);
   }
 
   _restoreHandlers() {

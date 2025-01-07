@@ -8,11 +8,10 @@ export default class OffersModel {
   }
 
   getOffersByType(type) {
-    const allOffers = this.#offers;
-    return allOffers.filter((offer) => offer.type === type);
+    return this.#offers.find((offer) => offer.type === type)?.offers || [];
   }
 
-  getOfferById(id) {
+  getOffersById(id) {
     return this.#offers.find((offer) => offer.id === id);
   }
 }
