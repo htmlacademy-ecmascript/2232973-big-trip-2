@@ -10,6 +10,8 @@ import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
 export default class ListPresenter {
   #listContainer = null;
   #pointsModel = null;
+  #destinationModel = null;
+  #offersModel = null;
 
   #listComponent = new ListView();
   #sortComponent = null;
@@ -17,12 +19,14 @@ export default class ListPresenter {
 
   #listPoints = [];
   #pointPresenters = new Map();
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.DAY;
   #sourcedListPoints = [];
 
-  constructor({listContainer, pointsModel}) {
+  constructor({listContainer, pointsModel, destinationModel, offersModel}) {
     this.#listContainer = listContainer;
     this.#pointsModel = pointsModel;
+    this.#destinationModel = destinationModel;
+    this.#offersModel = offersModel;
   }
 
   init() {
@@ -94,7 +98,10 @@ export default class ListPresenter {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#listComponent.element,
       onDataChange: this.#handlePointChange,
-      onModeChange: this.#handleModeChange
+      onModeChange: this.#handleModeChange,
+      pointsModel: this.#pointsModel,
+      destinationModel: this.#destinationModel,
+      offersModel: this.#offersModel
     });
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);

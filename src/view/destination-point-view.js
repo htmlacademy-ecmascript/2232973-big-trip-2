@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { calculateDuration, getEventDate } from '../utils/point.js';
 
-function createDestinationPointTemplate(point) {
-  const {type, destination, basePrice, dateFrom, dateTo, offers, isFavorite} = point;
+function createDestinationPointTemplate(point, destination, offers) {
+  const {type, basePrice, dateFrom, dateTo, isFavorite} = point;
   const startTimeOnly = dateFrom.split('T')[1].slice(0, 5);
   const endTimeOnly = dateTo.split('T')[1].slice(0, 5);
   const eventDate = getEventDate(dateFrom);
@@ -53,12 +53,16 @@ function createDestinationPointTemplate(point) {
 
 export default class DestinationPointView extends AbstractView {
   #point = null;
+  #destination = null;
+  #offers = null;
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
-  constructor({point, onEditClick, onFavoriteClick}) {
+  constructor({point, destination, offers, onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
+    this.#destination = destination;
+    this.#offers = offers;
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -69,7 +73,7 @@ export default class DestinationPointView extends AbstractView {
   }
 
   get template() {
-    return createDestinationPointTemplate(this.#point);
+    return createDestinationPointTemplate(this.#point, this.#destination, this.#offers);
   }
 
   #editClickHandler = (evt) => {
