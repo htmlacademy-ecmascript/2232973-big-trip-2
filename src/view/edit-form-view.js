@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {formatDateToCustom} from '../utils/point.js';
+import {formatDateToCustom, convertToISO} from '../utils/point.js';
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
@@ -75,7 +75,6 @@ function createEditFormTemplate(point, destinations, offers) {
       </div>
     `;
   };
-
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
   const eventTypeTemplates = eventTypes.map(getEventTypeTemplate).join('');
 
@@ -250,13 +249,15 @@ export default class EditFormView extends AbstractStatefulView {
   }
 
   #dateFromCloseHandler = ([userDate]) => {
-    this._setState({dateFrom: userDate});
-    this.#datepickerTo.set('minDate', this._state.dateFrom);
+    const isoDate = convertToISO(userDate);
+    this._setState({ dateFrom: isoDate });
+    this.#datepickerTo.set('minDate', isoDate);
   };
 
   #dateToCloseHandler = ([userDate]) => {
-    this._setState({dateTo: userDate});
-    this.#datepickerFrom.set('maxDate', this._state.dateTo);
+    const isoDate = convertToISO(userDate);
+    this._setState({ dateTo: isoDate });
+    this.#datepickerFrom.set('maxDate', isoDate);
   };
 
   reset(point) {
