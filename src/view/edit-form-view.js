@@ -1,5 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {formatDateToCustom} from '../utils/point.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createDestinationItemTemplate = (destinations) =>
   destinations.map(({name}) =>
@@ -149,6 +152,9 @@ export default class EditFormView extends AbstractStatefulView {
   #offers = null;
   #handleFormSubmit = null;
   #handleDiscardChanges = null;
+  #datepicker = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
   constructor({point, destinations, offers, onFormSubmit, onDiscardChanges}) {
     super();
@@ -165,6 +171,15 @@ export default class EditFormView extends AbstractStatefulView {
     return createEditFormTemplate(this._state, this.#destinations, this.#offers);
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#handleDiscardChanges);
@@ -175,6 +190,7 @@ export default class EditFormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#changeDestinationHandler);
 
+    this.#setDatepicker();
   }
 
   #formSubmitHandler = (evt) => {
@@ -201,6 +217,46 @@ export default class EditFormView extends AbstractStatefulView {
     this.updateElement({
       destination: currentDestination.id
     });
+  };
+
+  #setDatepicker() {
+    const [dateFromEl, dateToEl] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: {firstDayOfWeek: 1},
+      'time_24hr': true
+    };
+
+    this.#datepickerFrom = flatpickr(
+      dateFromEl,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateFrom,
+        onClose: this.#dateFromCloseHandler,
+        maxDate: this._state.dateTo
+      }
+    );
+
+    this.#datepickerTo = flatpickr(
+      dateToEl,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateTo,
+        onClose: this.#dateToCloseHandler,
+        minDate: this._state.dateFrom
+      }
+    );
+  }
+
+  #dateFromCloseHandler = ([userDate]) => {
+    this._setState({dateFrom: userDate});
+    this.#datepickerTo.set('minDate', this._state.dateFrom);
+  };
+
+  #dateToCloseHandler = ([userDate]) => {
+    this._setState({dateTo: userDate});
+    this.#datepickerFrom.set('maxDate', this._state.dateTo);
   };
 
   reset(point) {
