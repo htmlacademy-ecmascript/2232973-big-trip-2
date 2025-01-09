@@ -4,6 +4,8 @@ import {DATE_TIME_FORMAT, EVENT_DATE_FORMAT} from '../const';
 
 dayjs.extend(duration);
 
+const convertToISO = (date) => dayjs(date).toISOString();
+
 function calculateDuration(dateFrom, dateTo) {
   const start = dayjs(dateFrom);
   const end = dayjs(dateTo);
@@ -33,4 +35,4 @@ function getEventDate(date) {
   return dayjs(date).format(EVENT_DATE_FORMAT);
 }
 
-export {getEventDate, calculateDuration, formatDateToCustom};
+export {getEventDate, calculateDuration, formatDateToCustom, convertToISO};
