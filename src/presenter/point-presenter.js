@@ -12,7 +12,7 @@ export default class PointPresenter {
   #handleDataChange = null;
   #handleModeChange = null;
 
-  #pointsModel = null; ////////////neusaetsya
+  #pointsModel = null;
   #destinationModel = null;
   #offersModel = null;
 
@@ -29,6 +29,10 @@ export default class PointPresenter {
     this.#pointsModel = pointsModel;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
+  }
+
+  get points() {
+    return this.#pointsModel.points;
   }
 
   init(point) {

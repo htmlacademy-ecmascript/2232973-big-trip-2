@@ -1,7 +1,8 @@
+import Observable from '../framework/observable.js';
 import { mockPoints } from '../mock/points.js';
 // import { POINTS_COUNT } from '../const.js';
 
-export default class PointsModel {
+export default class PointsModel extends Observable {
   #points = mockPoints;
 
   get points() {
