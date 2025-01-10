@@ -31,10 +31,6 @@ export default class PointPresenter {
     this.#offersModel = offersModel;
   }
 
-  get points() {
-    return this.#pointsModel.points;
-  }
-
   init(point) {
     this.#point = point;
 
