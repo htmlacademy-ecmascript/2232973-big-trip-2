@@ -42,7 +42,6 @@ export default class ListPresenter {
   }
 
   init() {
-    this.#renderSort();
     this.#renderList();
   }
 
@@ -51,7 +50,6 @@ export default class ListPresenter {
   };
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -66,7 +64,6 @@ export default class ListPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
@@ -92,7 +89,6 @@ export default class ListPresenter {
     this.#clearList();
 
     this.#clearSortComponent();
-    this.#renderSort();
     this.#renderList();
   };
 
