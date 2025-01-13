@@ -1,7 +1,7 @@
 import ListView from '../view/list-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
-import {render, RenderPosition} from '../framework/render.js';
+import {remove, render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
@@ -72,9 +72,12 @@ export default class ListPresenter {
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-
+        this.#clearList();
+        this.#renderList();
         break;
       case UpdateType.MAJOR:
+        this.#clearList({resetSortType: true});
+        this.#renderList();
         break;
     }
   };
@@ -85,7 +88,9 @@ export default class ListPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearPointsList();
+
+    this.#clearList();
+
     this.#clearSortComponent();
     this.#renderSort();
     this.#renderList();
@@ -123,9 +128,19 @@ export default class ListPresenter {
     points.forEach((point) => this.#renderPoint(point));
   }
 
-  #clearPointsList() {
+  #clearList({resetSortType = false} = {}) {
+    // const pointsCount = this.points.length;
+
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointsComponent);
+    remove(this.#listComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
   }
 
   #renderNoPoints() {
@@ -135,11 +150,16 @@ export default class ListPresenter {
   #renderList() {
     render(this.#listComponent, this.#listContainer);
 
-    if (this.#pointsModel.points.length === 0) {
+    const points = this.points;
+    const taskCount = points.length;
+
+    if (taskCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
+    this.#renderSort();
     this.#renderPoints(this.points);
+    //тут было много кода в примере
   }
 }

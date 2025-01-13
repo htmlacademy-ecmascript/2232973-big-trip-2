@@ -42,8 +42,8 @@ export default class PointsModel extends Observable {
     }
 
     this.#points = [
-      ...this.tasks.slice(0, index),
-      ...this.tasks.slice(index + 1),
+      ...this.#points.slice(0, index),
+      ...this.#points.slice(index + 1),
     ];
 
     this._notify(updateType, update);
