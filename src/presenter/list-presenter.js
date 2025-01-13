@@ -3,7 +3,7 @@ import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
 import {render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
-import { SortType } from '../const.js';
+import { SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
 
 export default class ListPresenter {
@@ -24,6 +24,8 @@ export default class ListPresenter {
     this.#pointsModel = pointsModel;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
+
+    this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -48,8 +50,33 @@ export default class ListPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handlePointChange = (updatedPoint) => {
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointsModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsModel.deletePoint(updateType, update);
+        break;
+    }
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+
+        break;
+      case UpdateType.MAJOR:
+        break;
+    }
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -82,7 +109,7 @@ export default class ListPresenter {
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#listComponent.element,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
       pointsModel: this.#pointsModel,
       destinationModel: this.#destinationModel,
