@@ -16,7 +16,7 @@ export default class ListPresenter {
 
   #listComponent = new ListView();
   #sortComponent = null;
-  #noPointsComponent = new NoPointsView();
+  #noPointsComponent = null;
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
@@ -148,7 +148,12 @@ export default class ListPresenter {
   }
 
   #renderNoPoints() {
-    render(this.#noPointsComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    console.log(this.#filterModel.filter)
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#filterModel.filter
+    });
+
+    render(this.#noPointsComponent, this.#listContainer);
   }
 
   #renderList() {
