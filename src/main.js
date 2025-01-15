@@ -18,7 +18,8 @@ const listPresenter = new ListPresenter({
   listContainer: dataContainer,
   pointsModel,
   destinationModel,
-  offersModel
+  offersModel,
+  filterModel
 });
 
 const filterPresenter = new FilterPresenter({
