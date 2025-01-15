@@ -148,7 +148,6 @@ export default class ListPresenter {
   }
 
   #renderNoPoints() {
-    console.log(this.#filterModel.filter)
     this.#noPointsComponent = new NoPointsView({
       filterType: this.#filterModel.filter
     });
@@ -169,6 +168,5 @@ export default class ListPresenter {
 
     this.#renderSort();
     this.#renderPoints(this.points);
-    //тут было много кода в примере
   }
 }
