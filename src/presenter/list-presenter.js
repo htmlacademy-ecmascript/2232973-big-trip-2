@@ -3,7 +3,8 @@ import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import NewPointPresenter from './new-point-presenter.js';
+import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
 
@@ -19,14 +20,24 @@ export default class ListPresenter {
   #noPointsComponent = null;
 
   #pointPresenters = new Map();
+  #newPointPresenter = null;
   #currentSortType = SortType.DAY;
 
-  constructor({listContainer, pointsModel, destinationModel, offersModel, filterModel}) {
+  constructor({listContainer, pointsModel, destinationModel, offersModel, filterModel, onNewPointDestroy}) {
     this.#listContainer = listContainer;
     this.#pointsModel = pointsModel;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
     this.#filterModel = filterModel;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointsModel: this.#pointsModel,
+      destinationsModel: this.#destinationModel,
+      offersModel: this.#offersModel,
+      listContainer: this.#listComponent,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewPointDestroy
+    });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -53,7 +64,14 @@ export default class ListPresenter {
     this.#renderList();
   }
 
+  createPoint() {
+    this.#currentSortType = SortType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#newPointPresenter.init();
+  }
+
   #handleModeChange = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
@@ -135,6 +153,7 @@ export default class ListPresenter {
   #clearList({resetSortType = false} = {}) {
     // const pointsCount = this.points.length;
 
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 

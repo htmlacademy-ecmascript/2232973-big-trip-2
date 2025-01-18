@@ -56,11 +56,13 @@ function createEditFormTemplate(point, destinations, offers) {
   const {type, basePrice, dateFrom, dateTo} = point;
   const destination = destinations.find((currentDestination) =>
     currentDestination.id === point.destination);
+
   const {
-    name,
-    description,
-    photos
-  } = destination;
+    name = 'Unknown destination',
+    description = 'No description available',
+    photos = []
+  } = destination || {};
+
 
   const customStartDate = formatDateToCustom(dateFrom);
   const customEndDate = formatDateToCustom(dateTo);

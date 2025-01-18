@@ -1,5 +1,6 @@
 import Observable from '../framework/observable.js';
 import { mockPoints } from '../mock/points.js';
+import dayjs from 'dayjs';
 // import { POINTS_COUNT } from '../const.js';
 
 export default class PointsModel extends Observable {
@@ -47,5 +48,18 @@ export default class PointsModel extends Observable {
     ];
 
     this._notify(updateType, update);
+  }
+
+  get newPoint() {
+    return {
+      id: 'new',
+      basePrice: 0,
+      dateFrom: dayjs().toISOString(),
+      dateTo: dayjs().toISOString(),
+      destination: '',
+      isFavorite: false,
+      offers: [],
+      type: 'flight',
+    };
   }
 }
