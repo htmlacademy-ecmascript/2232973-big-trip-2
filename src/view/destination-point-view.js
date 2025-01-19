@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { calculateDuration, getEventDate } from '../utils/point.js';
+import he from 'he';
 
 function createDestinationPointTemplate(point, destination, offers) {
   const {type, basePrice, dateFrom, dateTo, isFavorite} = point;
@@ -37,7 +38,7 @@ function createDestinationPointTemplate(point, destination, offers) {
                   <p class="event__duration">${eventDuration}</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+                  &euro;&nbsp;<span class="event__price-value">${he.encode(String(basePrice))}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
