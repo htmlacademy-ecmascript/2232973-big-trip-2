@@ -58,7 +58,7 @@ export default class NewPointPresenter {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: 'new', ...point}
+      point,
     );
     this.destroy();
   };
