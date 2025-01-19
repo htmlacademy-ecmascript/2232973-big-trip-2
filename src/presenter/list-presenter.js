@@ -81,12 +81,15 @@ export default class ListPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this.#pointPresenters.get(update.id).setSaving();
         this.#pointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
+        this.#newPointPresenter.setSaving();
         this.#pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
+        this.#pointPresenters.get(update.id).setDeleting();
         this.#pointsModel.deletePoint(updateType, update);
         break;
     }
@@ -196,9 +199,9 @@ export default class ListPresenter {
     }
 
     const points = this.points;
-    const taskCount = points.length;
+    const pointsCount = points.length;
 
-    if (taskCount === 0) {
+    if (pointsCount === 0) {
       this.#renderNoPoints();
       return;
     }
