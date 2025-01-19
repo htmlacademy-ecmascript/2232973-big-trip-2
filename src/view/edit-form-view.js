@@ -61,13 +61,13 @@ function createEditFormTemplate(point, destinations, offers) {
   const {
     name = 'Unknown destination',
     description = 'No description available',
-    photos = []
+    pictures = []
   } = destination || {};
 
 
   const customStartDate = formatDateToCustom(dateFrom);
   const customEndDate = formatDateToCustom(dateTo);
-  const photosTemplate = photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('');
+  const photosTemplate = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('');
 
   const getEventTypeTemplate = (eventType) => {
     const isChecked = type === eventType ? 'checked' : '';

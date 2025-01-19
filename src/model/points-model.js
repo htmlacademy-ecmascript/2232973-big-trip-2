@@ -1,7 +1,6 @@
 import Observable from '../framework/observable.js';
-// import { mockPoints } from '../mock/points.js';
+import { UpdateType } from '../const.js';
 import dayjs from 'dayjs';
-// import { POINTS_COUNT } from '../const.js';
 
 export default class PointsModel extends Observable {
   #pointsApiService = null;
@@ -10,7 +9,6 @@ export default class PointsModel extends Observable {
   constructor({pointsApiService}) {
     super();
     this.#pointsApiService = pointsApiService;
-
   }
 
   get points() {
@@ -24,6 +22,8 @@ export default class PointsModel extends Observable {
     } catch(err) {
       this.#points = [];
     }
+
+    this._notify(UpdateType.INIT);
   }
 
   updatePoint(updateType, update) {

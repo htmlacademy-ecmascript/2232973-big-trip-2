@@ -17,8 +17,12 @@ const dataContainer = document.querySelector('.trip-events');
 const pointsModel = new PointsModel({
   pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
 });
-const destinationModel = new DestinationModel();
-const offersModel = new OffersModel();
+const destinationModel = new DestinationModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+const offersModel = new OffersModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
 const filterModel = new FilterModel();
 
 const listPresenter = new ListPresenter({
@@ -54,5 +58,8 @@ render(newPointButtonComponent, filterContainer);
 
 filterPresenter.init();
 listPresenter.init();
-pointsModel.init();
+offersModel.init()
+  .then(() => destinationModel.init())
+  .then(() => pointsModel.init());
+
 
