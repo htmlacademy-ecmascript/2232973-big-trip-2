@@ -35,4 +35,8 @@ function getEventDate(date) {
   return dayjs(date).format(EVENT_DATE_FORMAT);
 }
 
-export {getEventDate, calculateDuration, formatDateToCustom, convertToISO};
+function areDatesEqual(dateA, dateB) {
+  return dayjs(dateA).isSame(dayjs(dateB));
+}
+
+export {getEventDate, calculateDuration, formatDateToCustom, convertToISO, areDatesEqual};
