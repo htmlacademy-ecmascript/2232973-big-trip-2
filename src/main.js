@@ -54,12 +54,13 @@ function handleNewPointClick() {
   listPresenter.createPoint();
 }
 
-render(newPointButtonComponent, filterContainer);
-
 filterPresenter.init();
 listPresenter.init();
 offersModel.init()
   .then(() => destinationModel.init())
-  .then(() => pointsModel.init());
+  .then(() => pointsModel.init())
+  .finally(() => {
+    render(newPointButtonComponent, filterContainer);
+  });
 
 
