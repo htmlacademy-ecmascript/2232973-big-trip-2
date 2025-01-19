@@ -23,7 +23,8 @@ const createOfferItemTemplate = (offersByType, point, type) =>
           id="event-offer-${id}"
           data-offer-id="${id}"
           type="checkbox"
-          name="event-offer-${type}-${id}"
+          name="event-offer-${type}-${id}
+          value="${id}"
           ${isChecked}
         />
         <label class="event__offer-label" for="event-offer-${id}">
@@ -61,13 +62,13 @@ function createEditFormTemplate(point, destinations, offers) {
   const {
     name = 'Unknown destination',
     description = 'No description available',
-    photos = []
+    pictures = []
   } = destination || {};
 
 
   const customStartDate = formatDateToCustom(dateFrom);
   const customEndDate = formatDateToCustom(dateTo);
-  const photosTemplate = photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('');
+  const photosTemplate = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('');
 
   const getEventTypeTemplate = (eventType) => {
     const isChecked = type === eventType ? 'checked' : '';
@@ -197,6 +198,10 @@ export default class EditFormView extends AbstractStatefulView {
       .addEventListener('input', this.#changePriceHandler);
     this.element.querySelector('.event__reset-btn')
       .addEventListener('click', this.#formDeleteClickHandler);
+    if (this.element.querySelector('.event__section--offers')) {
+      this.element.querySelector('.event__section--offers')
+        .addEventListener('change', this.#offerChangeHandler);
+    }
 
     this.#setDatepicker();
   }
@@ -209,7 +214,7 @@ export default class EditFormView extends AbstractStatefulView {
   #changeTypeHandler = (evt) => {
     if (evt.target.closest('input')) {
       this.updateElement({
-        point: {...this._state}, type: evt.target.value
+        type: evt.target.value
       });
     }
   };
@@ -268,6 +273,21 @@ export default class EditFormView extends AbstractStatefulView {
     this._setState({ dateTo: isoDate });
     this.#datepickerFrom.set('maxDate', isoDate);
   };
+
+  #offerChangeHandler = (evt) => {
+    const currentOffer = evt.target.dataset.offerId;
+
+    if (evt.target.checked) {
+      this._setState({
+        offers: [...this._state.offers, currentOffer]
+      });
+    } else {
+      this._setState({
+        offers: this._state.offers.filter((offer) => offer !== currentOffer)
+      });
+    }
+  };
+
 
   #changePriceHandler = (evt) => {
     this._setState({

@@ -1,6 +1,7 @@
 import ListView from '../view/list-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
+import LoadingView from '../view/loading-view.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
@@ -16,12 +17,14 @@ export default class ListPresenter {
   #filterModel = null;
 
   #listComponent = new ListView();
+  #loadingComponent = new LoadingView();
   #sortComponent = null;
   #noPointsComponent = null;
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
+  #isLoading = true;
 
   constructor({listContainer, pointsModel, destinationModel, offersModel, filterModel, onNewPointDestroy}) {
     this.#listContainer = listContainer;
@@ -102,6 +105,11 @@ export default class ListPresenter {
         this.#clearList({resetSortType: true});
         this.#renderList();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderList();
+        break;
     }
   };
 
@@ -159,11 +167,16 @@ export default class ListPresenter {
 
     remove(this.#sortComponent);
     remove(this.#noPointsComponent);
+    remove(this.#loadingComponent);
     remove(this.#listComponent);
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#listContainer);
   }
 
   #renderNoPoints() {
@@ -176,6 +189,11 @@ export default class ListPresenter {
 
   #renderList() {
     render(this.#listComponent, this.#listContainer);
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
 
     const points = this.points;
     const taskCount = points.length;
