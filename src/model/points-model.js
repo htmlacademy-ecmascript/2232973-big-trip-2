@@ -4,7 +4,18 @@ import dayjs from 'dayjs';
 // import { POINTS_COUNT } from '../const.js';
 
 export default class PointsModel extends Observable {
+  #pointsApiService = null;
   #points = mockPoints;
+
+  constructor({pointsApiService}) {
+    super();
+    this.#pointsApiService = pointsApiService;
+
+    this.#pointsApiService.points
+      .then((points) => {
+        console.log(points);
+      });
+  }
 
   get points() {
     return this.#points;
