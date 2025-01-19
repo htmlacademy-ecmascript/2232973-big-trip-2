@@ -54,4 +54,5 @@ render(newPointButtonComponent, filterContainer);
 
 filterPresenter.init();
 listPresenter.init();
+pointsModel.init();
 
