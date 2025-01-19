@@ -119,6 +119,7 @@ export default class PointPresenter {
 
   #handleFormSubmit = (update) => {
     const isMinorUpdate =
+      this.#point.basePrice !== update.basePrice ||
       !areDatesEqual(this.#point.dateFrom, update.dateFrom) ||
       !areDatesEqual(this.#point.dateTo, update.dateTo);
 

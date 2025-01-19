@@ -3,7 +3,6 @@ import EditFormView from '../view/edit-form-view.js';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
-  // Изменить
   #pointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
@@ -12,7 +11,6 @@ export default class NewPointPresenter {
   #handleDestroy = null;
 
   #pointEditComponent = null;
-  // Изменить
   constructor({pointsModel, destinationsModel, offersModel, listContainer, onDataChange, onDestroy}) {
     this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
@@ -26,7 +24,6 @@ export default class NewPointPresenter {
     if (this.#pointEditComponent !== null) {
       return;
     }
-    // Изменить
     this.#pointEditComponent = new EditFormView({
       point: this.#pointsModel.newPoint,
       destinations: this.#destinationsModel.destinations,
@@ -34,10 +31,7 @@ export default class NewPointPresenter {
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick
     });
-    console.log(this.#pointListContainer)
     render(this.#pointEditComponent, this.#pointListContainer.element, RenderPosition.AFTERBEGIN);
-    console.log('Rendering EditFormView', this.#pointEditComponent, this.#pointListContainer);
-
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }

@@ -192,6 +192,8 @@ export default class EditFormView extends AbstractStatefulView {
       .addEventListener('change', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#changeDestinationHandler);
+    this.element.querySelector('.event__input--price')
+      .addEventListener('input', this.#changePriceHandler);
     this.element.querySelector('.event__reset-btn')
       .addEventListener('click', this.#formDeleteClickHandler);
 
@@ -264,6 +266,12 @@ export default class EditFormView extends AbstractStatefulView {
     const isoDate = convertToISO(userDate);
     this._setState({ dateTo: isoDate });
     this.#datepickerFrom.set('maxDate', isoDate);
+  };
+
+  #changePriceHandler = (evt) => {
+    this._setState({
+      basePrice: Number(evt.target.value)
+    });
   };
 
   #formDeleteClickHandler = (evt) => {
