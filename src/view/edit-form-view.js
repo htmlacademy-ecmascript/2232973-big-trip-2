@@ -61,8 +61,8 @@ function createEditFormTemplate(point, destinations, offers) {
     currentDestination.id === point.destination);
 
   const {
-    name = 'Unknown destination',
-    description = 'No description available',
+    name = '',
+    description = '',
     pictures = []
   } = destination || {};
 

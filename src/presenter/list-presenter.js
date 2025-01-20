@@ -200,8 +200,6 @@ export default class ListPresenter {
   }
 
   #clearList({resetSortType = false} = {}) {
-    // const pointsCount = this.points.length;
-
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
