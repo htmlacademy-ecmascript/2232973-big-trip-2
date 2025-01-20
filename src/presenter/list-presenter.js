@@ -2,15 +2,23 @@ import ListView from '../view/list-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import SortView from '../view/sort-view.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
+import HeaderInfoPresenter from './header-info-presenter.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 250,
+  UPPER_LIMIT: 1000,
+};
 
 export default class ListPresenter {
   #listContainer = null;
+  #filterContainer = null;
   #pointsModel = null;
   #destinationModel = null;
   #offersModel = null;
@@ -23,11 +31,17 @@ export default class ListPresenter {
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
+  #headerInfoPresenter = null;
   #currentSortType = SortType.DAY;
   #isLoading = true;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
-  constructor({listContainer, pointsModel, destinationModel, offersModel, filterModel, onNewPointDestroy}) {
+  constructor({listContainer, filterContainer, pointsModel, destinationModel, offersModel, filterModel, onNewPointDestroy}) {
     this.#listContainer = listContainer;
+    this.#filterContainer = filterContainer;
     this.#pointsModel = pointsModel;
     this.#destinationModel = destinationModel;
     this.#offersModel = offersModel;
@@ -40,6 +54,13 @@ export default class ListPresenter {
       listContainer: this.#listComponent,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewPointDestroy
+    });
+
+    this.#headerInfoPresenter = new HeaderInfoPresenter({
+      container: this.#filterContainer,
+      pointsModel: this.#pointsModel,
+      destinationsModel: this.#destinationModel,
+      offersModel: this.#offersModel
     });
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -79,6 +100,8 @@ export default class ListPresenter {
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
@@ -105,6 +128,8 @@ export default class ListPresenter {
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -123,6 +148,7 @@ export default class ListPresenter {
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
+        this.#headerInfoPresenter.init(this.#pointsModel.points);
         this.#renderList();
         break;
     }
