@@ -50,19 +50,6 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  #handleFormSubmit = (point) => {
-    if (!point.destination) {
-      this.destroy();
-      return;
-    }
-
-    this.#handleDataChange(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      point,
-    );
-  };
-
   setAborting() {
     const resetFormState = () => {
       this.#pointEditComponent.updateElement({
@@ -81,6 +68,19 @@ export default class NewPointPresenter {
       isSaving: true,
     });
   }
+
+  #handleFormSubmit = (point) => {
+    if (!point.destination) {
+      this.destroy();
+      return;
+    }
+
+    this.#handleDataChange(
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
 
   #handleDeleteClick = () => {
     this.destroy();

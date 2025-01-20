@@ -18,6 +18,33 @@ export default class HeaderInfoPresenter {
     this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
+  init(points) {
+    if (!points || points.length === 0) {
+      if (this.#headerInfoComponent) {
+        remove(this.#headerInfoComponent);
+        this.#headerInfoComponent = null;
+      }
+      return;
+    }
+
+    this.#offers = this.#offersModel.offers;
+
+    if (!this.#headerInfoComponent) {
+      this.#headerInfoComponent = new HeaderInfoView({
+        title: this.#getTitle(points).title,
+        dates: this.#getDates(points),
+        totalCost: this.#getTotalPrice(points)
+      });
+      render(this.#headerInfoComponent, this.#container, RenderPosition.AFTERBEGIN);
+    } else {
+      this.#headerInfoComponent.updateData({
+        title: this.#getTitle(points).title,
+        dates: this.#getDates(points),
+        totalCost: this.#getTotalPrice(points)
+      });
+    }
+  }
+
   #getTitle(points) {
     const sortedPoints = [...points].sort((currentPoint, nextPoint) => currentPoint.dateFrom - nextPoint.dateFrom);
     const firstPoint = sortedPoints[0];
@@ -70,33 +97,6 @@ export default class HeaderInfoPresenter {
       }
       return sum;
     }, 0);
-  }
-
-  init(points) {
-    if (!points || points.length === 0) {
-      if (this.#headerInfoComponent) {
-        remove(this.#headerInfoComponent);
-        this.#headerInfoComponent = null;
-      }
-      return;
-    }
-
-    this.#offers = this.#offersModel.offers;
-
-    if (!this.#headerInfoComponent) {
-      this.#headerInfoComponent = new HeaderInfoView({
-        title: this.#getTitle(points).title,
-        dates: this.#getDates(points),
-        totalCost: this.#getTotalPrice(points)
-      });
-      render(this.#headerInfoComponent, this.#container, RenderPosition.AFTERBEGIN);
-    } else {
-      this.#headerInfoComponent.updateData({
-        title: this.#getTitle(points).title,
-        dates: this.#getDates(points),
-        totalCost: this.#getTotalPrice(points)
-      });
-    }
   }
 
   #handleModelEvent = () => {

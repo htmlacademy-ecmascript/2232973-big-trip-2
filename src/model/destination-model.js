@@ -14,10 +14,6 @@ export default class DestinationModel extends Observable {
     return this.#destinations;
   }
 
-  getDestinationById(id) {
-    return this.#destinations.find((destination) => destination.id === id);
-  }
-
   async init() {
     try {
       this.#destinations = await this.#pointsApiService.destinations;
@@ -26,5 +22,9 @@ export default class DestinationModel extends Observable {
     }
 
     this._notify(UpdateType.INIT);
+  }
+
+  getDestinationById(id) {
+    return this.#destinations.find((destination) => destination.id === id);
   }
 }

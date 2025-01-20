@@ -15,6 +15,18 @@ export default class PointsModel extends Observable {
     return this.#points;
   }
 
+  get newPoint() {
+    return {
+      basePrice: 0,
+      dateFrom: dayjs().toISOString(),
+      dateTo: dayjs().toISOString(),
+      destination: '',
+      isFavorite: false,
+      offers: [],
+      type: 'flight',
+    };
+  }
+
   async init() {
     try {
       const points = await this.#pointsApiService.points;
@@ -78,18 +90,6 @@ export default class PointsModel extends Observable {
     } catch(err) {
       throw new Error(`Can't delete point ${ err}`);
     }
-  }
-
-  get newPoint() {
-    return {
-      basePrice: 0,
-      dateFrom: dayjs().toISOString(),
-      dateTo: dayjs().toISOString(),
-      destination: '',
-      isFavorite: false,
-      offers: [],
-      type: 'flight',
-    };
   }
 
   #adaptToClient(point) {
