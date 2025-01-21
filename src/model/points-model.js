@@ -15,6 +15,18 @@ export default class PointsModel extends Observable {
     return this.#points;
   }
 
+  get newPoint() {
+    return {
+      basePrice: 0,
+      dateFrom: dayjs().toISOString(),
+      dateTo: dayjs().toISOString(),
+      destination: '',
+      isFavorite: false,
+      offers: [],
+      type: 'flight',
+    };
+  }
+
   async init() {
     try {
       const points = await this.#pointsApiService.points;
@@ -27,21 +39,16 @@ export default class PointsModel extends Observable {
   }
 
   async updatePoint(updateType, update) {
-    const index = this.#points.findIndex((point) => point.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t update unexisting point');
-    }
 
     try {
       const response = await this.#pointsApiService.updatePoint(update);
       const updatedPoint = this.#adaptToClient(response);
 
-      this.#points = [
-        ...this.#points.slice(0, index),
-        updatedPoint,
-        ...this.#points.slice(index + 1),
-      ];
+      this.#points = this.#points.map((point) =>
+        point.id === updatedPoint.id
+          ? updatedPoint
+          : point
+      );
 
       this._notify(updateType, updatedPoint);
     } catch(err) {
@@ -49,41 +56,40 @@ export default class PointsModel extends Observable {
     }
   }
 
-  addPoint(updateType, update) {
-    this.#points = [
-      update,
-      ...this.#points,
-    ];
+  async addPoint(updateType, update) {
+    try {
+      const response = await this.#pointsApiService.addPoint(update);
+      const newPoint = this.#adaptToClient(response);
 
-    this._notify(updateType, update);
+      this.#points = [
+        newPoint,
+        ...this.#points,
+      ];
+
+      this._notify(updateType, newPoint);
+    } catch (error) {
+      throw new Error('Can\'t add point');
+    }
   }
 
-  deletePoint(updateType, update) {
+
+  async deletePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting point');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      ...this.#points.slice(index + 1),
-    ];
-
-    this._notify(updateType, update);
-  }
-
-  get newPoint() {
-    return {
-      id: 'new',
-      basePrice: 0,
-      dateFrom: dayjs().toISOString(),
-      dateTo: dayjs().toISOString(),
-      destination: '',
-      isFavorite: false,
-      offers: [],
-      type: 'flight',
-    };
+    try {
+      await this.#pointsApiService.deletePoint(update);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType, update);
+    } catch(err) {
+      throw new Error(`Can't delete point ${ err}`);
+    }
   }
 
   #adaptToClient(point) {

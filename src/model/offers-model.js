@@ -14,14 +14,6 @@ export default class OffersModel extends Observable {
     return this.#offers;
   }
 
-  getOffersByType(type) {
-    return this.#offers.find((offer) => offer.type === type)?.offers || [];
-  }
-
-  getOffersById(id) {
-    return this.#offers.find((offer) => offer.id === id);
-  }
-
   async init() {
     try {
       this.#offers = await this.#pointsApiService.offers;
@@ -30,5 +22,13 @@ export default class OffersModel extends Observable {
     }
 
     this._notify(UpdateType.INIT);
+  }
+
+  getOffersByType(type) {
+    return this.#offers.find((offer) => offer.type === type)?.offers || [];
+  }
+
+  getOffersById(id) {
+    return this.#offers.find((offer) => offer.id === id);
   }
 }
