@@ -3,6 +3,8 @@ import EditFormView from '../view/edit-form-view.js';
 import DestinationPointView from '../view/destination-point-view.js';
 import { UserAction, UpdateType } from '../const.js';
 import { areDatesEqual } from '../utils/point.js';
+import { handleEscapeKeyPress } from '../utils.js';
+
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -134,11 +136,10 @@ export default class PointPresenter {
   }
 
   #escKeydownHandler = (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
+    handleEscapeKeyPress(evt, () => {
       this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
-    }
+    });
   };
 
   #handleEditClick = () => {

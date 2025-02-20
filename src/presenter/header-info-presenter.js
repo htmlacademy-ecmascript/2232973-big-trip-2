@@ -1,6 +1,8 @@
 import HeaderInfoView from '../view/header-info-view';
 import { render, remove, RenderPosition } from '../framework/render';
 
+const MAX_SHOWN_POINTS = 3;
+
 export default class HeaderInfoPresenter {
   #container = null;
   #pointsModel = null;
@@ -51,7 +53,7 @@ export default class HeaderInfoPresenter {
     const lastPoint = sortedPoints[sortedPoints.length - 1];
 
     let routeTitle = '';
-    if (sortedPoints.length > 3) {
+    if (sortedPoints.length > MAX_SHOWN_POINTS) {
       const firstName = this.#destinationsModel.getDestinationById(firstPoint.destination);
       const lastName = this.#destinationsModel.getDestinationById(lastPoint.destination);
       routeTitle = `${firstName.name} — ... — ${lastName.name}`;

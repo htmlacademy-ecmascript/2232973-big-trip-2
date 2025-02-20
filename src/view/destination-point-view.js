@@ -9,7 +9,9 @@ function createDestinationPointTemplate(point, destination, offers) {
   const eventDate = getEventDate(dateFrom);
   const eventDuration = calculateDuration(dateFrom, dateTo);
 
-  const offersTemplate = offers.map((offer) => `<li class="event__offer">
+  const checkedOffers = offers.filter((offer) => point.offers.includes(offer.id));
+
+  const offersTemplate = checkedOffers.map((offer) => `<li class="event__offer">
     <span class="event__offer-title">${offer.title}</span>
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${offer.price}</span>
