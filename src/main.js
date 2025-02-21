@@ -8,6 +8,7 @@ import FilterModel from './model/filter-model.js';
 import AddPointView from './view/add-point-view.js';
 import PointsApiService from './points-api-service.js';
 
+
 const AUTHORIZATION = 'Basic 123qwassawq321';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
@@ -56,11 +57,10 @@ function handleNewPointClick() {
 
 filterPresenter.init();
 listPresenter.init();
+
 offersModel.init()
   .then(() => destinationModel.init())
   .then(() => pointsModel.init())
   .finally(() => {
     render(newPointButtonComponent, filterContainer);
   });
-
-

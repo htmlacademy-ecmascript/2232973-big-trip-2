@@ -4,6 +4,7 @@ import Observable from '../framework/observable.js';
 export default class DestinationModel extends Observable {
   #pointsApiService = null;
   #destinations = [];
+  #hasError = false;
 
   constructor({pointsApiService}) {
     super();
@@ -12,6 +13,10 @@ export default class DestinationModel extends Observable {
 
   get destinations() {
     return this.#destinations;
+  }
+
+  get hasError() {
+    return this.#hasError;
   }
 
   async init() {
