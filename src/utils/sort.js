@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 
-function sortByPrice(a, b) {
-  return b.basePrice - a.basePrice;
+function sortByPrice(FirstElem, SecondElem) {
+  return SecondElem.basePrice - FirstElem.basePrice;
 }
 
-function sortByTime(a, b) {
-  const durationA = dayjs(a.dateTo).diff(dayjs(a.dateFrom));
-  const durationB = dayjs(b.dateTo).diff(dayjs(b.dateFrom));
-  return durationA - durationB;
+function sortByTime(FirstElem, SecondElem) {
+  const durationFirst = dayjs(FirstElem.dateTo).diff(dayjs(FirstElem.dateFrom));
+  const durationSecond = dayjs(SecondElem.dateTo).diff(dayjs(SecondElem.dateFrom));
+  return durationSecond - durationFirst;
 }
 
-function sortByDay(a, b) {
-  return dayjs(a.dateFrom).diff(dayjs(b.dateFrom));
+function sortByDay(FirstElem, SecondElem) {
+  return dayjs(FirstElem.dateFrom).diff(dayjs(SecondElem.dateFrom));
 }
 
 export { sortByPrice, sortByTime, sortByDay };
