@@ -136,7 +136,7 @@ function createEditFormTemplate(point, destinations, offers, isCreating) {
                     id="event-start-time-1"
                     type="text"
                     name="event-start-time"
-                    value="${customStartDate}"
+                    value="${isCreating ? '' : customStartDate}"
                     ${isDisabled ? 'disabled' : ''}>
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -144,7 +144,7 @@ function createEditFormTemplate(point, destinations, offers, isCreating) {
                     id="event-end-time-1"
                     type="text"
                     name="event-end-time"
-                    value="${customEndDate}"
+                    value="${isCreating ? '' : customEndDate}"
                     ${isDisabled ? 'disabled' : ''}>
                   </div>
 
@@ -287,9 +287,9 @@ export default class EditFormView extends AbstractStatefulView {
       dateFromEl,
       {
         ...commonConfig,
-        defaultDate: this._state.dateFrom,
+        defaultDate: this.#isCreating ? '' : this._state.dateFrom,
         onClose: this.#dateFromCloseHandler,
-        maxDate: this._state.dateTo
+        maxDate: this._state.dateTo || ''
       }
     );
 
@@ -297,9 +297,9 @@ export default class EditFormView extends AbstractStatefulView {
       dateToEl,
       {
         ...commonConfig,
-        defaultDate: this._state.dateTo,
+        defaultDate: this.#isCreating ? '' : this._state.dateTo,
         onClose: this.#dateToCloseHandler,
-        minDate: this._state.dateFrom
+        minDate: this._state.dateFrom || ''
       }
     );
   }
