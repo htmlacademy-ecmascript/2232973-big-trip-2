@@ -10,6 +10,7 @@ import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByTime, sortByPrice } from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
 import HeaderInfoPresenter from './header-info-presenter.js';
+import FailToFetchView from '../view/fail-to-fetch-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 250,
@@ -26,6 +27,7 @@ export default class ListPresenter {
 
   #listComponent = new ListView();
   #loadingComponent = new LoadingView();
+  #failToLoadComponent = new FailToFetchView();
   #sortComponent = null;
   #noPointsComponent = null;
 
@@ -231,6 +233,11 @@ export default class ListPresenter {
 
     if (this.#isLoading) {
       this.#renderLoading();
+      return;
+    }
+
+    if (this.#pointsModel.hasError || this.#destinationModel.hasError || this.#offersModel.hasError) {
+      render(this.#failToLoadComponent, this.#listContainer);
       return;
     }
 

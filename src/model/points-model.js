@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 export default class PointsModel extends Observable {
   #pointsApiService = null;
   #points = [];
+  #hasError = false;
 
   constructor({pointsApiService}) {
     super();
@@ -27,12 +28,17 @@ export default class PointsModel extends Observable {
     };
   }
 
+  get hasError() {
+    return this.#hasError;
+  }
+
   async init() {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
     } catch(err) {
       this.#points = [];
+      this.#hasError = true;
     }
 
     this._notify(UpdateType.INIT);
